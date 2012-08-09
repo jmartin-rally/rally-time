@@ -149,7 +149,7 @@ Ext.define('CustomApp', {
         return hours;
     },
     _setColors: function(now) {
-        if ( now.getHours() < 11 ) {
+        if ( now.getHours() <= 11 ) {
             this.current_color = "#196C89";
             this.past_color = "#B5D8EB";
         } else {
