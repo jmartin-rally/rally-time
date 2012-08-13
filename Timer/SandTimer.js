@@ -48,30 +48,30 @@ Ext.define( 'SandTimer', {
         return font_string;
     },
     _findPackRadius: function( start_radius, count ) {
-    	/* hooray for brute force */
-    	var radius = Math.floor(start_radius);
-    	if ( radius > this.height / 2) {
-    		radius = this.height / 2;
-    	}
-    	if ( radius > this.width/2 ) {
-    		radius = this.width/2;
-    	}
-    	
-    	var overrun_flag = false;
-    	var x = radius + 2;
-    	var y = radius + 2;
-    	for ( var i=0; i<=count; i++ ) {
-    		x = x + 2*radius;
-    		if ( x > this.width - 4 - ( 2*radius ) ) {
-    			x = radius + 2;
-    			y = y + 2*radius;
-    		}
-    		if ( y > (this.height/2) - 4 - radius ) { overrun_flag = true; }
-    	}
-    	if ( overrun_flag ) {
-    		radius = this._findPackRadius( radius - 5, count );
-    	}
-    	return radius;
+        /* hooray for brute force */
+        var radius = Math.floor(start_radius);
+        if ( radius > this.height / 2) {
+            radius = this.height / 2;
+        }
+        if ( radius > this.width/2 ) {
+            radius = this.width/2;
+        }
+        
+        var overrun_flag = false;
+        var x = radius + 2;
+        var y = radius + 2;
+        for ( var i=0; i<=count; i++ ) {
+            x = x + 2*radius;
+            if ( x > this.width - 4 - ( 2*radius ) ) {
+                x = radius + 2;
+                y = y + 2*radius;
+            }
+            if ( y > (this.height/2) - 4 - radius ) { overrun_flag = true; }
+        }
+        if ( overrun_flag ) {
+            radius = this._findPackRadius( radius - 5, count );
+        }
+        return radius;
     },
     _createSand: function(){
         this.sand = [];        
@@ -88,19 +88,19 @@ Ext.define( 'SandTimer', {
             }
 
             var particle = Ext.create( 'Ext.draw.Sprite', {
-            	type: 'path',
-            	radius: radius,
-            	orig_y: y,
-            	scale: {
-            		x: ratio,
-            		y: ratio
-            	},
-            	stroke: "#EF3F35",
-            	"stroke-width": 4,
-            	x: x,
-            	y: y,
-            	opacity: 1,
-            	path: 'm 0,0 a 50,50 0 1,0 0,-100 a 50,50 0 1,0 0,100  a 30,30 0 1,0 0,-60 a 30,30 0 1,0 0,60 a 15,15 0 1,0 0,-30 a 15,15 0 1,0 0,30'
+                type: 'path',
+                radius: radius,
+                orig_y: y,
+                scale: {
+                    x: ratio,
+                    y: ratio
+                },
+                stroke: "#EF3F35",
+                "stroke-width": 4,
+                x: x,
+                y: y,
+                opacity: 1,
+                path: 'm 0,0 a 50,50 0 1,0 0,-100 a 50,50 0 1,0 0,100  a 30,30 0 1,0 0,-60 a 30,30 0 1,0 0,60 a 15,15 0 1,0 0,-30 a 15,15 0 1,0 0,30'
             });
             particle.setAttributes( { translate: { x: x, y: y } } );
             this.sand.unshift( particle );
@@ -117,7 +117,8 @@ Ext.define( 'SandTimer', {
             particle.animate( { 
                 to: { 
                     stroke: '#EF3F35',
-                    translate: { y: new_y, x: new_x }
+                    translate: { y: new_y, x: new_x },
+                    path: 'm 0,0 a 50,50 0 1,0 0,-100 a 50,50 0 1,0 0,100  a 30,30 0 1,0 0,-60 a 30,30 0 1,0 0,60 a 15,15 0 1,0 0,-30 a 15,15 0 1,0 0,30'
                 }, 
                 duration: 400
             } );
@@ -134,11 +135,15 @@ Ext.define( 'SandTimer', {
                 var distance_from_border = particle.y;
                 var new_y = ( 0.5 * me.height )  + distance_from_border - 2;
                 var new_x = particle.x;
+                var old_x = particle.x;
+                var old_y = particle.y;
+                
                 particle.animate( { 
                     to: { 
                         stroke: '#196C89',
-                        translate: { y: new_y, x: new_x }
-                    }, 
+                        translate: { y: new_y, x: new_x },
+                        path: 'm 0,0 a 50,50 0 1,0 0,-100 a 50,50 0 1,0 0,100  a 30,30 0 1,0 0,-60 a 30,30 0 1,0 0,60 a 15,15 0 1,0 0,-30 a 15,15 0 1,0 0,30'
+                    },
                     duration: 600
                 } );
             }

@@ -56,28 +56,62 @@
                     var font_string = font_size + "px Arial";
                     return font_string;
                 },
-                _createSand: function(){
-                    this.sand = [];
-                    var area = ( this.width * 0.5 * this.height ) - 16 ;
-                    var item_area = area / this.total;
-                    var radius = Math.sqrt( item_area / 3.14159 ) * 0.75;
+                _findPackRadius: function( start_radius, count ) {
+                    /* hooray for brute force */
+                    var radius = Math.floor(start_radius);
+                    if ( radius > this.height / 2) {
+                        radius = this.height / 2;
+                    }
+                    if ( radius > this.width/2 ) {
+                        radius = this.width/2;
+                    }
                     
-                    var x = 2 - radius;
+                    var overrun_flag = false;
+                    var x = radius + 2;
+                    var y = radius + 2;
+                    for ( var i=0; i<=count; i++ ) {
+                        x = x + 2*radius;
+                        if ( x > this.width - 4 - ( 2*radius ) ) {
+                            x = radius + 2;
+                            y = y + 2*radius;
+                        }
+                        if ( y > (this.height/2) - 4 - radius ) { overrun_flag = true; }
+                    }
+                    if ( overrun_flag ) {
+                        radius = this._findPackRadius( radius - 5, count );
+                    }
+                    return radius;
+                },
+                _createSand: function(){
+                    this.sand = [];        
+                    var radius = this._findPackRadius(this.width,this.total);
+                    var ratio = radius / 50;
+                    
+                    var x = 4 - radius;
                     var y = ( 0.5 * this.height ) - 2 - radius;
                     for ( var i=0;i<this.total; i++ ) {
                         x += ( 2 * radius ) ;
-                        if ( x > ( this.width - 2 ) ) { 
+                        if ( x > ( this.width - ( 2*radius ) - 2 ) ) { 
                             x = radius + 2; 
                             y -= ( 2 * radius ); 
                         }
-                        
+            
                         var particle = Ext.create( 'Ext.draw.Sprite', {
-                            type: 'circle',
+                            type: 'path',
+                            radius: radius,
+                            orig_y: y,
+                            scale: {
+                                x: ratio,
+                                y: ratio
+                            },
+                            stroke: "#EF3F35",
+                            "stroke-width": 4,
                             x: x,
                             y: y,
-                            radius: radius,
-                            fill: '#5c9acb'
+                            opacity: 1,
+                            path: 'm 0,0 a 50,50 0 1,0 0,-100 a 50,50 0 1,0 0,100  a 30,30 0 1,0 0,-60 a 30,30 0 1,0 0,60 a 15,15 0 1,0 0,-30 a 15,15 0 1,0 0,30'
                         });
+                        particle.setAttributes( { translate: { x: x, y: y } } );
                         this.sand.unshift( particle );
                     }
                 },
@@ -86,13 +120,16 @@
                     this.counter.animate ({ to: { text: "  " }, duration: 1 });
                     Ext.Array.each( this.sand, function( particle, index ) {
                          var distance_from_border = particle.y;
-                        var new_y = ( 0.5 * me.height )  - distance_from_border - 2;               
+                        var new_y = particle.orig_y;   
+                        var new_x = particle.x;
+            
                         particle.animate( { 
                             to: { 
-                                fill: '#5c9acb',
-                                y: new_y
+                                stroke: '#EF3F35',
+                                translate: { y: new_y, x: new_x },
+                                path: 'm 0,0 a 50,50 0 1,0 0,-100 a 50,50 0 1,0 0,100  a 30,30 0 1,0 0,-60 a 30,30 0 1,0 0,60 a 15,15 0 1,0 0,-30 a 15,15 0 1,0 0,30'
                             }, 
-                            duration: 5
+                            duration: 400
                         } );
                     });
                 },
@@ -106,12 +143,16 @@
                         if ( index >= remaining ) {
                             var distance_from_border = particle.y;
                             var new_y = ( 0.5 * me.height )  + distance_from_border - 2;
-                        
+                            var new_x = particle.x;
+                            var old_x = particle.x;
+                            var old_y = particle.y;
+                            
                             particle.animate( { 
                                 to: { 
-                                    fill: '#b5d8eb',
-                                    y: new_y
-                                }, 
+                                    stroke: '#196C89',
+                                    translate: { y: new_y, x: new_x },
+                                    path: 'm 0,0 a 50,50 0 1,0 0,-100 a 50,50 0 1,0 0,100  a 30,30 0 1,0 0,-60 a 30,30 0 1,0 0,60 a 15,15 0 1,0 0,-30 a 15,15 0 1,0 0,30'
+                                },
                                 duration: 600
                             } );
                         }

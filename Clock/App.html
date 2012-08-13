@@ -178,9 +178,9 @@
                     var me = this;
                     Ext.Array.each( this.seconds_array, function( second, index ) {
                         if ( index > count ) {
-                            second.animate( { to: { fill: '#fff' } } );
+                            second.setAttributes( { fill: '#fff' }, true );
                         } else {
-                            second.animate( { to: { fill: me.past_color } } );
+                            second.setAttributes( { fill: me.past_color }, true );
                         }
                     });
                 },
@@ -196,34 +196,30 @@
                             //  units
                             var sub_index = index - 6;
                             if ( sub_index > units ) {
-                                minute.animate( { to: { fill: '#fff' } } );
+                                minute.setAttributes(  { fill: '#fff' }, true );
                             } else if ( sub_index === units ) { 
-                                minute.animate( { to: { fill: me.current_color } } );
-                                me.minute_units_text.animate( { 
-                                    to: { 
+                                minute.setAttributes( { fill: me.current_color }, true );
+                                me.minute_units_text.setAttributes( { 
                                         x: minute.x + ( 0.25 * minute.width ), 
                                         y: minute.y  + ( minute.height / 2 ),
                                         text: units
-                                    } 
-                                });
+                                }, true);
                             } else {
-                                minute.animate( { to: { fill: me.past_color } } );
+                                minute.setAttributes(  { fill: me.past_color }, true  );
                             }
                         } else {
                             // tens
                             if ( index > tens ) {
-                                minute.animate( { to: { fill: '#fff' } } );
+                                minute.setAttributes(  { fill: '#fff' }, true);
                             } else if ( index === tens ) { 
-                                minute.animate( { to: { fill: me.current_color } } );
-                                me.minute_tens_text.animate( { 
-                                    to: { 
+                                minute.setAttributes(  { fill: me.current_color }, true );
+                                me.minute_tens_text.setAttributes( { 
                                         x: minute.x + ( 0.75 * minute.width  ), 
                                         y: minute.y  + ( minute.height / 2 ),
                                         text: tens
-                                    } 
-                                });
+                                }, true);
                             } else {
-                                minute.animate( { to: { fill: me.past_color } } );
+                                minute.setAttributes(  { fill: me.past_color }, true );
                             }
                         }
                     });
@@ -237,20 +233,18 @@
                     
                     Ext.Array.each( this.hours_array, function( hour, index ) {
                         if ( index > count ) {
-                            hour.animate( { to: { fill: '#fff' } } );
+                            hour.setAttributes( { fill: '#fff' }, true);
                         } else if ( index === count ) {
-                            hour.animate( { to: { fill: me.current_color } } );
+                            hour.setAttributes(  { fill: me.current_color }, true );
                             
-                            me.hour_text.animate( { 
-                                to: { 
+                            me.hour_text.setAttributes( { 
                                     x: hour.x + ( 0.75 * hour.width ), 
                                     y: hour.y + ( hour.height / 2 ),
                                     text: count + 1
-                                } 
-                            } );
+                            }, true );
                             
                         } else {
-                            hour.animate( { to: { fill: me.past_color} } );
+                            hour.setAttributes(  { fill: me.past_color}, true );
                         }
                     });
                 }
